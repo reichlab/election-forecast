@@ -1,0 +1,6 @@
+# IntelliJ IDEA configurations
+.idea/
+*.iml
+
+# Locked Pipfile (nonlocked version not ignored)
+Pipfile.lock

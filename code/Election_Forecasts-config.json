@@ -1,0 +1,15 @@
+{
+  "name": "2020 Election Forecasts",
+  "is_public": false,
+  "description": "This project stores forecasts from multiple election forecast sites, including FiveThirtyEight and the Economist, for ease of access and comparison.",
+  "home_url": "https://reichlab.io",
+  "logo_url": "http://reichlab.io/assets/images/logo/nav-logo.png",
+  "core_data": "https://zoltardata.com/",
+  "time_interval_type": "Week",
+  "visualization_y_label": "Votes/voteshare",
+  "timezeros": [],
+  "targets": [],
+  "units": [
+    {"name": "US-pres"}, {"name": "AL-pres"}
+  ]
+}

@@ -4,3 +4,6 @@
 
 # Locked Pipfile (nonlocked version not ignored)
 Pipfile.lock
+
+# Downloaded data
+data/

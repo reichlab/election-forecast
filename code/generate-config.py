@@ -1,114 +1,49 @@
 import json
+from constants import *
 from itertools import product
 
-# TODO: make this into a CLI app using click
+def generate_preamble():
+    # initialize config object
+    config = dict()
 
-LOCATION_CODES = {
-    'US': 'US National',
-    'AL': 'Alabama',
-    'AK': 'Alaska',
-    'AZ': 'Arizona',
-    'AR': 'Arkansas',
-    'CA': 'California',
-    'CO': 'Colorado',
-    'CT': 'Connecticut',
-    'DE': 'Delaware',
-    'FL': 'Florida',
-    'GA': 'Georgia',
-    'HI': 'Hawaii',
-    'ID': 'Idaho',
-    'IL': 'Illinois',
-    'IN': 'Indiana',
-    'IA': 'Iowa',
-    'KS': 'Kansas',
-    'KY': 'Kentucky',
-    'LA': 'Louisiana',
-    'ME': 'Maine',
-    'MD': 'Maryland',
-    'MA': 'Massachusetts',
-    'MI': 'Michigan',
-    'MN': 'Minnesota',
-    'MS': 'Mississippi',
-    'MO': 'Missouri',
-    'MT': 'Montana',
-    'NE': 'Nebraska',
-    'NV': 'Nevada',
-    'NH': 'New Hampshire',
-    'NJ': 'New Jersey',
-    'NM': 'New Mexico',
-    'NY': 'New York',
-    'NC': 'North Carolina',
-    'ND': 'North Dakota',
-    'OH': 'Ohio',
-    'OK': 'Oklahoma',
-    'OR': 'Oregon',
-    'PA': 'Pennsylvania',
-    'RI': 'Rhode Island',
-    'SC': 'South Carolina',
-    'SD': 'South Dakota',
-    'TN': 'Tennessee',
-    'TX': 'Texas',
-    'UT': 'Utah',
-    'VT': 'Vermont',
-    'VA': 'Virginia',
-    'WA': 'Washington',
-    'WV': 'West Virginia',
-    'WI': 'Wisconsin',
-    'WY': 'Wyoming'
-}
+    # fields
+    config['name'] = '2020 Election Forecasts'
+    config['is_public'] = False
+    config['description'] = 'This project stores forecasts from multiple election forecast sites, ' + \
+                            'including FiveThirtyEight and the Economist, for ease of access and comparison.'
+    config['home_url'] = 'https://reichlab.io'
+    config['logo_url'] = 'http://reichlab.io/assets/images/logo/nav-logo.png'
+    config['core_data'] = 'https://zoltardata.com/'
+    config['time_interval_type'] = 'Week'
+    config['visualization_y_label'] = 'Votes/voteshare (percent)'
 
-ELECTION_CODES = {
-    'pres': 'Presidential',
-    'sen': 'Senate',
-}
-
-TARGETS = [
-    {
-        'name': 'popular vote win for Democrats',
-        'type': 'binary'
-    },
-    {
-        'name': 'Electoral College win for Democrats',
-        'type': 'binary'
-    },
-    {
-        'name': 'electoral votes won by Democrats',
-        'type': 'discrete',
-        'is_step_ahead': False,
-        'unit': 'votes',
-        'range': [0, 538]
-    },
-    {
-        'name': 'Share of two-party (D/R) popular vote for Democrats',
-        'type': 'continuous',
-        'is_step_ahead': False,
-        'unit': 'percent',
-        'range': [0, 100]
-    }
-]
-
-CONFIG_LOCAL_PATH = 'code/Election_Forecasts-config.json'
+    return config
 
 
 def generate_units():
-    units = list(map(lambda x: f'{x[0]}-{x[1]}', product(LOCATION_CODES.keys(), ELECTION_CODES.keys())))
+    # generate unit strings from encoded location and election types
+    units = []
+    for location in LOCATION_CODES:
+        for election in ELECTION_CODES:
+            if election == 'sen' and location not in LOCATIONS_WITH_SENATE_ELECTION:
+                continue
+            units.append({'name': f'{location}-{election}'})
 
     # there is a special election for a Georgia senate seat this year
-    units.append('GA-sen-sp')
+    units.append({'name': 'GA-sen-sp'})
+
     return units
 
 
-def generate_targets():
-    return json.JSONEncoder().encode(TARGETS)
-
-
-def read_config():
-    with open(CONFIG_LOCAL_PATH, 'r') as f:
-        config = json.loads(f.read())
+def generate_config():
+    with open(CONFIG_LOCAL_PATH, 'w') as f:
+        config = generate_preamble()
         config['units'] = generate_units()
-        print(json.dumps(config['units']))
+        config['targets'] = TARGETS
+        config['timezeros'] = []
 
-    return "unimplemented"
+        f.write(json.dumps(config))
+        f.close()
 
 
-read_config()
+generate_config()

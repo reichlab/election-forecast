@@ -1,8 +1,10 @@
 # TODO:
 
 - (done) ~~create project, define targets~~
-- decide on data schema
 - automate data pulling from sources
+- convert data to zoltar format (csv or json)
+- upload to zoltar
+
 
 # Questions
 
@@ -20,3 +22,5 @@ what to do after we collect the data?
 - LeanTossup
   - sample prediction type
   - random sampling of available data (~500-1000)
+  
+Q: point prediction: mean or median? mean isn't actually a data point, but median is. quantile: median = 0.5?

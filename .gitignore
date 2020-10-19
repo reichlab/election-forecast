@@ -7,3 +7,12 @@ Pipfile.lock
 
 # Downloaded data
 data/
+
+# environment file containing production Zoltar username and password
+zoltar.env
+
+# scratch python (playground)
+scratch.py
+
+# pycache
+*/__pycache__

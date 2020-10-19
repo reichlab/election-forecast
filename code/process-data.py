@@ -1,6 +1,11 @@
 from urllib.request import urlopen
+from zipfile import ZipFile
 
 FTE = '538'
+ECONOMIST = 'economist'
+JHK = 'jhk'
+OURPROGRESS = 'ourprogress'
+LEANTOSSUP = 'leantossup'
 
 URLS = {
     FTE: {
@@ -9,18 +14,18 @@ URLS = {
         'senate-nat': 'https://projects.fivethirtyeight.com/2020-general-data/senate_national_toplines_2020.csv',
         'senate-state': 'https://projects.fivethirtyeight.com/2020-general-data/senate_state_toplines_2020.csv'
     },
-    'economist': {
+    ECONOMIST: {
         'all-zip': 'https://cdn.economistdatateam.com/us-2020-forecast/data/president/economist_model_output.zip',
     },
-    'jhk': {
+    JHK: {
         'pres': 'https://data.jhkforecasts.com/2020-presidential.csv',
         'senate': 'https://data.jhkforecasts.com/2020-senate.csv'
     },
-    'ourprogress': {
+    OURPROGRESS: {
         'pres': 'https://becd085d-5f24-4974-b9b5-73518197155a.filesusr.com/ugd' +
                 '/83fab9_eaf58f194c8f4b129f30625179a7a789.csv?dn=Winning%20Odds%20-%20Winning%20Odds%20(3).csv',
     },
-    'leantossup': {
+    LEANTOSSUP: {
         'pres': 'http://www.leantossup.ca/US_Pres_2020/US_2020_Results.xlsx',
         'pres-sims': 'http://www.leantossup.ca/US_Pres_2020/US_State_Results.xlsx'
     }
@@ -33,20 +38,19 @@ DOWNLOAD_PATHS = {
         'senate-nat': 'data/538/senate-nat.csv',
         'senate-state': 'data/538/senate-state.csv'
     },
-    'economist': {
-        'all-zip': 'data/538/all.zip',
+    ECONOMIST: {
+        'all-zip': 'data/economist/all.zip',
     },
-    'jhk': {
-        'pres': 'https://data.jhkforecasts.com/2020-presidential.csv',
-        'senate': 'https://data.jhkforecasts.com/2020-senate.csv'
+    JHK: {
+        'pres': 'data/jhk/pres.csv',
+        'senate': 'data/jhk/senate.csv'
     },
-    'ourprogress': {
-        'pres': 'https://becd085d-5f24-4974-b9b5-73518197155a.filesusr.com/ugd' +
-                '/83fab9_eaf58f194c8f4b129f30625179a7a789.csv?dn=Winning%20Odds%20-%20Winning%20Odds%20(3).csv',
+    OURPROGRESS: {
+        'pres': 'data/ourprogress/pres.csv',
     },
-    'leantossup': {
-        'pres': 'http://www.leantossup.ca/US_Pres_2020/US_2020_Results.xlsx',
-        'pres-sims': 'http://www.leantossup.ca/US_Pres_2020/US_State_Results.xlsx'
+    LEANTOSSUP: {
+        'pres': 'data/leantossup/pres.xlsx',
+        'pres-sims': 'data/leantossup/pres-sims.xlsx'
     }
 }
 
@@ -71,7 +75,25 @@ def download(site_key):
 
 
 def process_economist_zipped_files():
-    pass
+    zipped_filename_length = len('all.zip')
+    zipped_filename = DOWNLOAD_PATHS[ECONOMIST]['all-zip']
+    subpath = zipped_filename[:-zipped_filename_length]
+    with ZipFile(zipped_filename, 'r') as zipped:
+        for member in zipped.namelist():
+            filename_wo_path = member.split('/')[-1]
+            with zipped.open(member, 'r') as input_file:
+                with open(subpath + filename_wo_path, 'wb') as output_file:
+                    output_file.write(input_file.read())
+                    output_file.close()
+                input_file.close()
+        zipped.close()
+        print('done!')
 
 
-download('538')
+# download(FTE)
+# download(ECONOMIST)
+# download(JHK)
+# download(OURPROGRESS)
+# download(LEANTOSSUP)
+
+process_economist_zipped_files()

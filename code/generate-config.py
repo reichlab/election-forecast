@@ -1,6 +1,6 @@
 import json
 from constants import *
-from itertools import product
+
 
 def generate_preamble():
     # initialize config object

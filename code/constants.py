@@ -61,7 +61,6 @@ LOCATION_CODES = {
 
 LOCATION_CODES_REVERSE = {v: k for k, v in LOCATION_CODES.items()}
 
-
 ELECTION_CODES = {
     'pres': 'Presidential',
     'sen': 'Senate',
@@ -157,23 +156,30 @@ URLS = {
 
 DOWNLOAD_PATHS = {
     FTE: {
+        'root': 'data/538/',
         'pres-nat': 'data/538/pres-nat.csv',
         'pres-state': 'data/538/pres-state.csv',
         'senate-nat': 'data/538/senate-nat.csv',
         'senate-state': 'data/538/senate-state.csv'
     },
     ECONOMIST: {
+        'root': 'data/economist/',
         'all-zip': 'data/economist/all.zip',
     },
     JHK: {
+        'root': 'data/jhk/',
         'pres': 'data/jhk/pres.csv',
         'senate': 'data/jhk/senate.csv'
     },
     OURPROGRESS: {
+        'root': 'data/ourprogress/',
         'pres': 'data/ourprogress/pres.csv',
     },
     LEANTOSSUP: {
+        'root': 'data/leantossup/',
         'pres': 'data/leantossup/pres.xlsx',
         'pres-sims': 'data/leantossup/pres-sims.xlsx'
     }
 }
+
+SEED = 413
